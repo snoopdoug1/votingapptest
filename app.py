@@ -96,6 +96,16 @@ def getvotes():
     string_votes = '[{"name": "outback", "value": ' + string_outback + '},' + '{"name": "bucadibeppo", "value": ' + string_bucadibeppo + '},' + '{"name": "ihop", "value": '  + string_ihop + '}, ' + '{"name": "chipotle", "value": '  + string_chipotle + '}]'
     return string_votes
 
+
+@app.route("/api/getdoublevotes")
+def getvotes():
+    string_outback = readvote("outback")
+    string_ihop = readvote("ihop")
+    string_bucadibeppo = readvote("bucadibeppo")
+    string_chipotle = readvote("chipotle")
+    string_votes = '[{"name2": "outback", "value": ' + string_outback + '},' + '{"name": "bucadibeppo", "value": ' + string_bucadibeppo + '},' + '{"name": "ihop", "value": '  + string_ihop + '}, ' + '{"name": "chipotle", "value": '  + string_chipotle + '}]'
+    return string_votes
+
 @app.route("/api/getheavyvotes")
 def getheavyvotes():
     string_outback = readvote("outback")
