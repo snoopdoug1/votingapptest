@@ -1,6 +1,6 @@
 import os
-
-from flask import Flask
+from datetime import datetime
+from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
 from random import randrange
 import simplejson as json
@@ -110,6 +110,51 @@ def getheavyvotes():
     pool = Pool(processes)
     pool.map(f, range(processes))
     return string_votes
+
+@app.route("/api/leaderboard")
+def get_leaderboard():
+    restaurants = ["outback", "ihop", "bucadibeppo", "chipotle"]
+    leaderboard_data = []
+    
+    for restaurant in restaurants:
+        votes = int(readvote(restaurant))  # Reuse existing readvote helper
+        restaurant_data = {
+            'name': restaurant,
+            'votes': votes,
+            'rank': 0
+        }
+        leaderboard_data.append(restaurant_data)
+    
+    # Sort restaurants by votes (descending)
+    leaderboard_data.sort(key=lambda x: x['votes'], reverse=True)
+    
+    # Add rankings
+    for i, restaurant in enumerate(leaderboard_data):
+        restaurant['rank'] = i + 1
+    
+    # Calculate fun stats
+    stats = {
+        'total_votes': sum(r['votes'] for r in leaderboard_data),
+        'leader': leaderboard_data[0]['name'] if leaderboard_data else None,
+        'leader_votes': leaderboard_data[0]['votes'] if leaderboard_data else 0,
+        'closest_race': None,
+        'vote_gap': None
+    }
+    
+    # Find closest race (smallest vote gap between adjacent ranks)
+    min_gap = float('inf')
+    for i in range(len(leaderboard_data) - 1):
+        gap = leaderboard_data[i]['votes'] - leaderboard_data[i + 1]['votes']
+        if gap < min_gap:
+            min_gap = gap
+            stats['closest_race'] = f"{leaderboard_data[i]['name']} vs {leaderboard_data[i + 1]['name']}"
+            stats['vote_gap'] = gap
+
+    return jsonify({
+        'rankings': leaderboard_data,
+        'stats': stats,
+        'timestamp': datetime.now().isoformat()
+    })
 
 if __name__ == '__main__':
    app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)))
