@@ -25,8 +25,24 @@ The `apprunner.yaml` file has been adapted to enable [X-Ray](https://aws.amazon.
 
 If you want to familiarize with App Runner and have more step by step instructions on how to deploy applications using either source code directly or existing docker images please check out the [AWS App Runner Workshop](https://www.apprunnerworkshop.com/).  
 
+### Linting
 
-#### AWS App Runner console deployment
+To ensure code quality and consistency, we use `flake8` for linting. To run the linter:
+
+1. Make sure you have installed the dependencies from `requirements.txt`:
+   ```
+   pip install -r requirements.txt
+   ```
+
+2. Run flake8:
+   ```
+   flake8
+   ```
+
+This will check the Python code in the project according to the rules specified in the `.flake8` configuration file.
+
+
+### AWS App Runner console deployment
 
 First, please check the [preparation](/preparation) folder in this repository to create the DynamoDB table and the various roles and policies required. Also, if you choose to deploy from source, clone this repo in your GH account. Then move to the AWS App Runner console.
 
@@ -42,7 +58,7 @@ The last step is important because it is what grant this App Runner service acce
 
 Please note that the `apprunner.yaml` configuration file set the `DDB_AWS_REGION` variable to `us-west-2`. If your DynamoDB table is in another region (and/or if you opted to create a table with a different name) please change/add the variables values accordingly in the file. 
 
-#### AWS App Runner CLI deployment
+### AWS App Runner CLI deployment
 
 Similar to the console deployment, please check the [preparation](/preparation) folder in this repository first to create the DynamoDB table and the various roles and policies required. Also, if you choose to deploy from source, clone this repo in your GH account. Be sure you have setup the AWS CLI and proper credentials. 
 
@@ -54,7 +70,7 @@ Remember to substitute the `CONNECTION_ARN`, `GH_USER`, `ACCOUNT_ID` and `IAM_RO
 aws apprunner create-service --cli-input-json file://apprunner_cli_input.json
 ```
 
-#### Variables
+### Variables
 
 - `DDB_AWS_REGION` this variable is required and needs to be set to the region of the DynamoDB table.
 - `DDB_TABLE_NAME` this variable is optional and contains the DynamoDB table name (default: `votingapp-restaurants`)
@@ -62,11 +78,11 @@ aws apprunner create-service --cli-input-json file://apprunner_cli_input.json
 - `OTEL_PYTHON_ID_GENERATOR` and `OTEL_PROPAGATORS` are required to enable the X-Ray integration
 - `OTEL_PYTHON_DISABLED_INSTRUMENTATIONS` and `OTEL_RESOURCE_ATTRIBUTES` are optional and relates to the X-Ray integration
 
-#### Deploying the application with other services and platforms  
+### Deploying the application with other services and platforms  
 
 This app has been created to test deployments to AWS App Runner. However, this is a standard Python application you can use in any other context provided you adhere to the architecture and prerequisites. The application comes with its `requirements.txt` file and `Dockerfile`. 
 
-#### Known limitations and to-do
+### Known limitations and to-do
 
 - the `getheavyvotes` API doesn't really work as expected and it's WIP 
 - the script should ideally be turned into a CFN template with custom resources to initialize the DDB table
@@ -75,7 +91,7 @@ This app has been created to test deployments to AWS App Runner. However, this i
 - the Flask server doesn't have debug enabled. To do so add the following variable: `FLASK_ENV-development` (please note this variable is [incompatible with OpenTelemetry](https://github.com/open-telemetry/opentelemetry-python-contrib/issues/546) so the X-Ray integration won't work until this will get fixed)
 
 
-#### Licensing
+### Licensing
 
 This application is made available under the [MIT license](./LICENSE). The Python prerequisite required to run this application and their licensing are as follows:
 ```
