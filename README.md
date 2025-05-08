@@ -25,6 +25,26 @@ The `apprunner.yaml` file has been adapted to enable [X-Ray](https://aws.amazon.
 
 If you want to familiarize with App Runner and have more step by step instructions on how to deploy applications using either source code directly or existing docker images please check out the [AWS App Runner Workshop](https://www.apprunnerworkshop.com/).  
 
+### GitHub Actions Deployment
+
+This repository includes a GitHub Actions workflow that automates the deployment process to AWS App Runner. The workflow is triggered on pushes to the main branch. To use this automated deployment, you need to set up the following secrets in your GitHub repository:
+
+1. `AWS_ACCESS_KEY_ID`: Your AWS access key ID
+2. `AWS_SECRET_ACCESS_KEY`: Your AWS secret access key
+3. `AWS_REGION`: The AWS region where your App Runner service and ECR repository are located
+4. `ECR_REPOSITORY`: The name of your ECR repository
+
+To set up these secrets:
+
+1. Go to your GitHub repository
+2. Click on "Settings" > "Secrets and variables" > "Actions"
+3. Click on "New repository secret"
+4. Add each of the secrets mentioned above
+
+Once these secrets are set up, every push to the main branch will trigger the workflow, which will build the Docker image, push it to ECR, and deploy it to App Runner.
+
+Make sure you have created the necessary AWS resources (ECR repository, App Runner service, etc.) before running this workflow. You may need to modify the `apprunner_cli_input.json` file to match your specific App Runner service configuration.
+
 
 #### AWS App Runner console deployment
 

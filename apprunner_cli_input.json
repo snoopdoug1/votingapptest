@@ -1,23 +1,15 @@
 {
   "ServiceName": "votingapp",
   "SourceConfiguration": {
-    "AuthenticationConfiguration": {
-      "ConnectionArn": "CONNECTION_ARN"
+    "ImageRepository": {
+      "ImageIdentifier": "${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}",
+      "ImageRepositoryType": "ECR"
     },
-    "CodeRepository": {
-      "RepositoryUrl": "https://github.com/GH_USER/votingapp",
-      "SourceCodeVersion": {
-        "Type": "BRANCH",
-        "Value": "master"
-      },
-      "CodeConfiguration": {
-        "ConfigurationSource": "REPOSITORY"
-      }
-    }
+    "AutoDeploymentsEnabled": true
   },
   "InstanceConfiguration": {
     "Cpu": "1 vCPU",
     "Memory": "3 GB",
-    "InstanceRoleArn": "arn:aws:iam::ACCOUNT_ID:role/IAM_ROLE"
+    "InstanceRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID}:role/${IAM_ROLE}"
   }
 }
