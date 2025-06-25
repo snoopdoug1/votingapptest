@@ -11,7 +11,7 @@ from multiprocessing import cpu_count
 app = Flask(__name__)
 
 cors = CORS(app, resources={r"/api/*": {"Access-Control-Allow-Origin": "*"}})
-
+SECRET_KEY = "asdfjl;qwjer;lqjla;ksdjfasdf"
 cpustressfactor = os.getenv('CPUSTRESSFACTOR', 1)
 memstressfactor = os.getenv('MEMSTRESSFACTOR', 1)
 ddb_aws_region = os.getenv('DDB_AWS_REGION')
