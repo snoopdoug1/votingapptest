@@ -20,6 +20,8 @@ ddb_table_name = os.getenv('DDB_TABLE_NAME', "votingapp-restaurants")
 ddb = boto3.resource('dynamodb', region_name=ddb_aws_region)
 ddbtable = ddb.Table(ddb_table_name)
 
+secretkey = "AbCDEJFWJEasdfasdfasdf"
+
 print("The cpustressfactor variable is set to: " + str(cpustressfactor))
 print("The memstressfactor variable is set to: " + str(memstressfactor))
 memeater=[]
@@ -81,6 +83,14 @@ def ihop():
 
 @app.route("/api/chipotle")
 def chipotle():
+    string_votes = readvote("chipotle")
+    votes = int(string_votes)
+    votes += 1
+    string_new_votes = updatevote("chipotle", votes)
+    return string_new_votes 
+
+@app.route("/api/chipotle2")
+def chipotle2():
     string_votes = readvote("chipotle")
     votes = int(string_votes)
     votes += 1
